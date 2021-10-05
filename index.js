@@ -1,23 +1,36 @@
-let { AddMetaClass, CreateClass } = require('./MetaClass')
+let _cls
 
-class metaclass {
-	static __new__(name, attr) {
-		name = "xxx"
-		return CreateClass(name, attr)
+function getConstructor(obj) {
+	if(obj === null) return Object
+	if(obj.toString().split(' ')[0] === 'class') return obj
+	if(typeof obj === 'function') return obj
+	return obj.constructor
+}
+
+exports.AddMetaClass = (mcls) => {
+	return function(cls) {
+		_cls = cls
+		mcls.__new__(cls.name, cls.prototype)
 	}
 }
 
-@AddMetaClass(metaclass)
-class test {
-	constructor() {
-		console.log(true)
+exports.CreateClass = (name, ...attr) => {
+	let base = getConstructor(_cls)
+	let attrs = attr.entries()
+	
+	eval(`global['${name}'] = class ${name} extends base {
+
+		constructor(...args) {
+			if(base !== null)
+				super(...args)
+			else
+				super()
+		}
+	}`)
+
+	for(let [key, value] of attrs) {
+		global[name].prototype[key] = value
 	}
 
-	get() {
-		console.log("get")
-	}
+	return global[name]
 }
-
-setTimeout(() => {
-	(new xxx()).get();
-}, 2000)
