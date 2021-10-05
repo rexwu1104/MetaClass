@@ -1,4 +1,4 @@
-let { AddMetaClass, CreateClass } = require('MetaClass.js')
+let { AddMetaClass, CreateClass } = require('@jspy-code/metacls')
 
 class metaclass {
 	static __new__(name, attr) {
