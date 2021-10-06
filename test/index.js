@@ -1,16 +1,8 @@
-let { AddMetaClass, CreateClass } = require('@jspy-code/metacls')
+let metacls = require('../index')
 
-class metaclass {
-	static __new__(name, attr) {
-		name = "xxx"
-		return CreateClass(name, attr)
-	}
-}
-
-@AddMetaClass(metaclass)
-class test {
+class test extends metacls {
 	constructor() {
-		console.log(true)
+		return super("xxx", test, { x: 1 })
 	}
 
 	get() {
@@ -18,6 +10,10 @@ class test {
 	}
 }
 
-setTimeout(() => {
-	(new xxx()).get();
-}, 2000)
+console.log(test)
+
+let cls = new test()
+console.log(cls)
+
+console.log(cls.x)
+cls.get()
