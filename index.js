@@ -9,7 +9,9 @@ module.exports = class metacls extends Object {
 		super()
 		if(name.indexOf(' ') !== -1)
 			throw new ClassNameError()
-		eval(`this.cls = class ${name} {}`)
+		Object.defineProperty(this, 'cls', {
+			value: new Function(`return function ${name}() {}`)()
+		})
 
 		let base_prototype_properties = Object.getOwnPropertyDescriptors(base.prototype)
 		if(base_prototype_properties)
